@@ -1,0 +1,2 @@
+Generate executable:
+pyinstaller "Program-v9.py" --upx-dir "__upx_dir__" --noconsole --icon "cgol.ico" --onefile --add-data "cgol.ico;." --clean --key "_key_" --name "CGOL-v9"
