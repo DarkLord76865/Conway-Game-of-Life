@@ -1,6 +1,13 @@
 # Conway's Game of Life
-Simulation of Conway's Game of Life
+A simulation of Conway's Game of Life
 
 
 
-![screenshot](https://user-images.githubusercontent.com/40371578/178271620-75877a7e-7533-4125-a248-68f1576da27e.png)
+## Downloading
+Prebuilt program is available under Releases
+
+## Building
+1. Clone repository
+2. Run command: `pip install -r requirements.txt`
+3. Run build.py
+4. Built `*.exe` will be placed in the same folder
