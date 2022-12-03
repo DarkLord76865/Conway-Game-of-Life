@@ -16,8 +16,9 @@ def update_gui():
 	global kocke
 	global kocke_gui
 	global horizontal_move, vertical_move
-	for i in range(22):
-		for j in range(36):
+	global field_sizes, current_field
+	for i in range(field_sizes[current_field][1]):
+		for j in range(field_sizes[current_field][0]):
 			if (i + vertical_move, j + horizontal_move) in kocke:
 				cnv.itemconfig(kocke_gui[i][j], fill="#ffffff")
 			else:
@@ -65,14 +66,15 @@ def mis_listen(event=None):
 	global kocke_gui
 	global started
 	global horizontal_move, vertical_move
+	global field_sizes, current_field
 	if not started:
-		if event.x % 26 <= 24 and (event.y - 1) % 26 <= 24:
-			if ((event.y - 1) // 26 + vertical_move, event.x // 26 + horizontal_move) in kocke:
-				cnv.itemconfig(kocke_gui[(event.y - 1) // 26][event.x // 26], fill="#000000")
-				kocke.remove(((event.y - 1) // 26 + vertical_move, event.x // 26 + horizontal_move))
+		if event.x % (field_sizes[current_field][2] + 1) <= (field_sizes[current_field][2] - 1) and (event.y - 1) % (field_sizes[current_field][2] + 1) <= (field_sizes[current_field][2] - 1):
+			if ((event.y - 1) // (field_sizes[current_field][2] + 1) + vertical_move, event.x // (field_sizes[current_field][2] + 1) + horizontal_move) in kocke:
+				cnv.itemconfig(kocke_gui[(event.y - 1) // (field_sizes[current_field][2] + 1)][event.x // (field_sizes[current_field][2] + 1)], fill="#000000")
+				kocke.remove(((event.y - 1) // (field_sizes[current_field][2] + 1) + vertical_move, event.x // (field_sizes[current_field][2] + 1) + horizontal_move))
 			else:
-				cnv.itemconfig(kocke_gui[(event.y - 1) // 26][event.x // 26], fill="#ffffff")
-				kocke.append(((event.y - 1) // 26 + vertical_move, event.x // 26 + horizontal_move))
+				cnv.itemconfig(kocke_gui[(event.y - 1) // (field_sizes[current_field][2] + 1)][event.x // (field_sizes[current_field][2] + 1)], fill="#ffffff")
+				kocke.append(((event.y - 1) // (field_sizes[current_field][2] + 1) + vertical_move, event.x // (field_sizes[current_field][2] + 1) + horizontal_move))
 		updt_br_cell()
 
 def rst(event=None):
@@ -154,6 +156,39 @@ def change_sim_speed(faster):
 	else:
 		sim_speed *= 2
 
+def change_zoom(out):
+	global current_field
+	old = current_field
+	if out:
+		if current_field != 2:
+			current_field += 1
+	else:
+		if current_field != 0:
+			current_field -= 1
+	draw_current_zoom(old)
+
+def draw_current_zoom(old_zoom=None):
+	global kocke, kocke_gui
+	global field_sizes, current_field
+	global horizontal_move, vertical_move
+	cnv.delete("all")
+	for i in range(0, 572, field_sizes[current_field][2] + 1):
+		cnv.create_line(0, i, 935, i, fill="#808080", width=1)
+	for i in range(field_sizes[current_field][2], 935, field_sizes[current_field][2] + 1):
+		cnv.create_line(i, 0, i, 572, fill="#808080", width=1)
+	kocke_gui = []
+	for i in range(field_sizes[current_field][1]):
+		red_gui = []
+		for j in range(field_sizes[current_field][0]):
+			red_gui.append(cnv.create_rectangle(j * (field_sizes[current_field][2] + 1), i * (field_sizes[current_field][2] + 1) + 1, j * (field_sizes[current_field][2] + 1) + field_sizes[current_field][2], i * (field_sizes[current_field][2] + 1) + field_sizes[current_field][2] + 1, fill="#000000", width=0))
+		kocke_gui.append(red_gui)
+	if old_zoom is not None:
+		horizontal_move += (field_sizes[old_zoom][0] - field_sizes[current_field][0]) // 2
+		vertical_move += (field_sizes[old_zoom][1] - field_sizes[current_field][1]) // 2
+		if old_zoom != current_field and old_zoom == 0:
+			vertical_move += 1
+	update_gui()
+
 def main():
 	global kocke
 	global kocke_gui
@@ -168,6 +203,13 @@ def main():
 	global alive_info
 	global keys_pressed
 	global sim_speed
+	global field_sizes, current_field
+
+	kocke = []
+	kocke_gui = []
+
+	field_sizes = ((18, 11, 51), (36, 22, 25), (72, 44, 12))  # nx, ny, width
+	current_field = 1
 
 	sim_speed = 250
 
@@ -216,6 +258,9 @@ def main():
 	                      background="#ffffff", activebackground="#ffffff")
 	zoom_out_btn.place(x=535, y=40, height=40, width=40)
 
+	zoom_in_btn.bind("<ButtonRelease-1>", lambda event: change_zoom(False))
+	zoom_out_btn.bind("<ButtonRelease-1>", lambda event: change_zoom(True))
+
 	naslov = Label(root, anchor="center", text="Conway's Game of Life", font="Helvetica 26 italic", background="#ffffff", foreground="#000000", highlightthickness=0)
 	naslov.place(x=0, y=0, height=80, width=400)
 
@@ -249,19 +294,7 @@ def main():
 	cnv.place(x=0, y=80)
 	cnv.bind("<ButtonRelease-1>", mis_listen)
 
-	for i in range(0, 572, 26):
-		cnv.create_line(0, i, width, i, fill="#808080", width=1)
-	for i in range(25, 935, 26):
-		cnv.create_line(i, 0, i, 572, fill="#808080", width=1)
-
-	kocke = []
-	kocke_gui = []
-	for i in range(22):
-		red_gui = []
-		for j in range(36):
-			red_gui.append(cnv.create_rectangle(j * 26, i * 26 + 1, j * 26 + 25, i * 26 + 25 + 1, fill="#000000", width=0))
-		kocke_gui.append(red_gui)
-	del red_gui
+	draw_current_zoom()
 
 	started = False
 	sim_num = 0
