@@ -1,7 +1,7 @@
 # Conway's Game of Life
 A simulation of Conway's Game of Life
 
-
+![screenshot](https://user-images.githubusercontent.com/40371578/205412072-96eee701-68fc-41ab-903c-b50fd0cff45b.png)
 
 ## Downloading
 Prebuilt program is available under Releases
