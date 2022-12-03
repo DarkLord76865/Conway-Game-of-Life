@@ -73,7 +73,7 @@ def build(name, console, onefile, uac_admin, key, icon, upx, files, folders):
 	shutil.rmtree(path=work_path, ignore_errors=True)
 
 def main():
-	name = "Conway's Game of Life v10.0.0"
+	name = "Conways Game of Life v10.0.0"
 	console = False
 	onefile = True
 	uac_admin = False
