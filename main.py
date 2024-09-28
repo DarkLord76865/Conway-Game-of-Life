@@ -195,8 +195,8 @@ class App:
 		self.root.bind("<KeyRelease-Down>", lambda event: arrow_click(event, "release"))
 		keys_pressed = [False, False, False, False]  # left, right, up, down
 
-		self.toolbar = tk.Frame(self.root, background="#ffffff", highlightthickness=0, width=init_width, height=80)
-		self.toolbar.place(relwidth=1, relheight=80/init_height, relx=0, rely=0)
+		self.toolbar = tk.Frame(self.root, background="#ffffff", highlightthickness=0, width=init_width, height=60)
+		self.toolbar.place(relwidth=1, relheight=50/init_height, relx=0, rely=0)
 
 		self.title_lbl = tk.Label(self.toolbar, anchor="center", text="Conway's Game of Life", font="Helvetica 26 italic",
 		                          background="#ffffff", foreground="#000000", highlightthickness=0)
@@ -213,7 +213,7 @@ class App:
 		self.stats_num.place(relx=0, rely=0.42, relwidth=1, relheight=0.5)
 
 		self.canvas = tk.Canvas(self.root, highlightthickness=0, background="#000000")
-		self.canvas.place(relx=0, rely=80/init_height, relwidth=1, relheight=(init_height - 80)/init_height)
+		self.canvas.place(relx=0, rely=50/init_height, relwidth=1, relheight=(init_height - 50)/init_height)
 		self.canvas.bind("<MouseWheel>", lambda event: print(event))  # +120/-120 .delta
 
 		plus_img = tk.PhotoImage(file=self.resource_path("resources/plus-sign.png"))
@@ -230,19 +230,19 @@ class App:
 		speed_up_btn.bind("<ButtonRelease-1>", lambda event: change_sim_speed(True))
 		slow_down_btn.bind("<ButtonRelease-1>", lambda event: change_sim_speed(False))
 
-		zoom_in_img = tk.PhotoImage(file=self.resource_path("resources/zoom-in.png"))
-		zoom_out_img = tk.PhotoImage(file=self.resource_path("resources/zoom-out.png"))
-		zoom_in_btn = tk.Button(self.root, image=zoom_in_img,
-		                     borderwidth=0, highlightthickness=0,
-		                     background="#ffffff", activebackground="#ffffff")
-		zoom_in_btn.place(x=535, y=0, height=40, width=40)
-		zoom_out_btn = tk.Button(self.root, image=zoom_out_img,
-		                      anchor="center", borderwidth=0, highlightthickness=0,
-		                      background="#ffffff", activebackground="#ffffff")
-		zoom_out_btn.place(x=535, y=40, height=40, width=40)
+		#zoom_in_img = tk.PhotoImage(file=self.resource_path("resources/zoom-in.png"))
+		#zoom_out_img = tk.PhotoImage(file=self.resource_path("resources/zoom-out.png"))
+		#zoom_in_btn = tk.Button(self.root, image=zoom_in_img,
+		#                     borderwidth=0, highlightthickness=0,
+		#                     background="#ffffff", activebackground="#ffffff")
+		#zoom_in_btn.place(x=535, y=0, height=40, width=40)
+		#zoom_out_btn = tk.Button(self.root, image=zoom_out_img,
+		#                      anchor="center", borderwidth=0, highlightthickness=0,
+		#                      background="#ffffff", activebackground="#ffffff")
+		#zoom_out_btn.place(x=535, y=40, height=40, width=40)
 
-		zoom_in_btn.bind("<ButtonRelease-1>", lambda event: change_zoom(False))
-		zoom_out_btn.bind("<ButtonRelease-1>", lambda event: change_zoom(True))
+		#zoom_in_btn.bind("<ButtonRelease-1>", lambda event: change_zoom(False))
+		#zoom_out_btn.bind("<ButtonRelease-1>", lambda event: change_zoom(True))
 
 		start_sim_bt = tk.Button(self.root, anchor="center", text="START SIMULATION", borderwidth=0, font="Helvetica 11 bold",
 		                      background="#ffffff", activebackground="#ffffff", foreground="#000000",
